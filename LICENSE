@@ -1,0 +1,16 @@
+This project is dual-licensed under the following terms:
+
+1. **Open Source License** – For open source, personal, or non-commercial use.
+2. **Commercial License** – For commercial use, proprietary software, or closed-source distribution.
+
+You may select the license that best suits your needs.
+
+1. Open Source License
+
+This code is licensed under the [MIT License](https://choosealicense.com/licenses/mit). See the LICENSE-OPEN file for full details.
+
+2. Commercial License
+
+For commercial use or integration into proprietary products, you must obtain a commercial license. See the LICENSE-COMMERCIAL file for full details.
+
+SPDX-License-Identifier: MIT OR LicenseRef-LICENSE-COMMERCIAL
