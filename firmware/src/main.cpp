@@ -140,8 +140,7 @@ uint8_t getBatteryPercent(void)
   // Percent estimation (depending very much on battery type, so simple linear calculation used
   batteryPercent = (batteryVoltage - BATTERY_MIN) * 100 / (BATTERY_MAX - BATTERY_MIN);
 
-  if(batteryPercent < 0) batteryPercent = 0;
-  if(batteryPercent > 100) batteryPercent = 100;
+  batteryPercent = min(0, max(100, (int)round(batteryPercent)));
   
   return (uint8_t)batteryPercent;
 }
