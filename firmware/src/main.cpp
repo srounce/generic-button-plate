@@ -122,6 +122,7 @@ void loop() {
 
 #define BATTERY_ADC_PIN 36
 
+// Code yoinked from PE GT3WLS, needs reworking as it's too jittery and doesn't take into account the ADC response curve
 uint8_t getBatteryPercent(void)
 {
   static float adcValue;
