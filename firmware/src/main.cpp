@@ -93,12 +93,29 @@ void setup() {
   bleGamepad.begin(&gamepadConfig);
 }
 
+bool hasConnected = false;
+bool canSendBatteryState = false;
+unsigned long int connectedTime = 0;
+
 void loop() {
   if (bleGamepad.isConnected())
   {
-    batteryLevel = getBatteryPercent();
-    bleGamepad.setBatteryLevel(batteryLevel);
-    
+    if (hasConnected == false) {
+      connectedTime = millis();
+    }
+    hasConnected = true;
+
+    // wait for 3 secs to send battery info
+    if (!canSendBatteryState && millis() - connectedTime > 3000) {
+      canSendBatteryState = true;
+    }
+
+    if (canSendBatteryState) {
+      bleGamepad.setBatteryPowerInformation(POWER_STATE_PRESENT);
+      batteryLevel = getBatteryPercent();
+      bleGamepad.setBatteryLevel(batteryLevel);
+    }
+
     for (const auto &binding : buttonBindings) {
       if(!digitalRead(binding.first)) {
         bleGamepad.press(binding.second);
@@ -109,6 +126,12 @@ void loop() {
     
     bleGamepad.sendReport();
     delay(5);
+  } else {
+    if (hasConnected == true) {
+      hasConnected = false;
+      connectedTime = 0;
+      canSendBatteryState = false;
+    }
   }
 }
 
