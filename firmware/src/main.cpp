@@ -72,7 +72,7 @@ void setup() {
   Serial.println("Starting BLE work!");
   //Serial.setDebugOutput(true);
 
-  setCpuFrequencyMhz(120);
+  setCpuFrequencyMhz(80);
 
   BleGamepadConfiguration gamepadConfig;
   gamepadConfig.setControllerType(CONTROLLER_TYPE_JOYSTICK);
@@ -100,13 +100,14 @@ unsigned long int connectedTime = 0;
 void loop() {
   if (bleGamepad.isConnected())
   {
+    unsigned long int now = millis();
     if (hasConnected == false) {
-      connectedTime = millis();
+      connectedTime = now;
     }
     hasConnected = true;
 
     // wait for 3 secs to send battery info
-    if (!canSendBatteryState && millis() - connectedTime > 3000) {
+    if (!canSendBatteryState && now - connectedTime > 3000) {
       canSendBatteryState = true;
     }
 
@@ -145,8 +146,7 @@ void loop() {
 
 #define BATTERY_ADC_PIN 36
 
-// Code yoinked from PE GT3WLS, needs reworking as it's too jittery and doesn't take into account the ADC response curve
-uint8_t getBatteryPercent(void)
+uint8_t getBatteryPercent()
 {
   static float adcValue;
   float batteryVoltage;
@@ -163,7 +163,7 @@ uint8_t getBatteryPercent(void)
   // Percent estimation (depending very much on battery type, so simple linear calculation used
   batteryPercent = (batteryVoltage - BATTERY_MIN) * 100 / (BATTERY_MAX - BATTERY_MIN);
 
-  batteryPercent = min(0, max(100, (int)round(batteryPercent)));
+  batteryPercent = max(0, min(100, (int)round(batteryPercent)));
   
   return (uint8_t)batteryPercent;
 }
